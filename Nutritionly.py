@@ -1,16 +1,66 @@
 import requests
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
+import paypalrestsdk
 
 app = Flask(__name__)
 
+paypalrestsdk.configure({
+  "mode": "sandbox", # sandbox or live
+  "client_id": "AeoEfjH_9XiGmSQluXx34t6SMoOMXczIt9ZZIpLKaFeSAepMgynihbLNlgkIi8iGKHo3moMMM5BS-S4a",
+  "client_secret": "EECiI5Aeeca3zaMiV1dUtTRPNl8YT1LZZBvDGVJa-mgoyuRxkST_riZhKX6XjQpL1a4_-g2-q26FnDmg" })
+
 @app.route('/')
 def index():
-	return 'This is the homepage'
+    return render_template('index.html')
 
+@app.route('/payment', methods=['POST'])
+def payment():
+
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"},
+        "redirect_urls": {
+            "return_url": "http://localhost:3000/payment/execute",
+            "cancel_url": "http://localhost:3000/"},
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": "testitem",
+                    "sku": "12345",
+                    "price": "50.00",
+                    "currency": "USD",
+                    "quantity": 1}]},
+            "amount": {
+                "total": "50.00",
+                "currency": "USD"},
+            "description": "This is the payment transaction description."}]})
+
+    if payment.create():
+        print('Payment success!')
+    else:
+        print(payment.error)
+
+    return jsonify({'paymentID' : payment.id})
+
+@app.route('/execute', methods=['POST'])
+def execute():
+    success = False
+
+    payment = paypalrestsdk.Payment.find(request.form['paymentID'])
+
+    if payment.execute({'payer_id' : request.form['payerID']}):
+        print('Execute success!')
+        success = True
+    else:
+        print(payment.error)
+
+    return jsonify({'success' : success})
+"""
 @app.route('/tuna')
 def tuna():
 	return '<h2>Tuna is good</h2>'
-"""
+
 #Use <var> to pass in String variables
 @app.route('/profile/<username>')
 def profile(username):
@@ -20,11 +70,10 @@ def profile(username):
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
 	return '<h2>Post ID is %s</h2>' % post_id
-"""
+
 #returns HTTP request method used
 @app.route("/req")
 def req():
-	print(dir(request))
 	return "Method used: %s" % request.method
 	
 
@@ -35,7 +84,7 @@ def request2():
 	else:
 		return "You are probably using GET"	
 	print("TEST")
-"""
+
 #inputs "name" variable into html "template", use {{var}} in html file
 @app.route("/intro/<name>")
 def intro(name):
@@ -49,5 +98,5 @@ def index(user=None)
 
 
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
 
