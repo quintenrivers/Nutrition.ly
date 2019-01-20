@@ -13,6 +13,7 @@
       <link href = "http://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel = "stylesheet">
 			<link href = "{{ url_for('static', filename='toolkit-minimal.css') }}"       rel = "stylesheet">
 			<link href = "{{ url_for('static', filename='application-minimal.css') }}"   rel = "stylesheet">
+			<link href = "{{ url_for('static', filename='google_fonts.css') }}"   rel = "stylesheet">
 
     <style>
       /* note: this is a hack for ios iframe for bootstrap themes shopify page */
@@ -205,7 +206,7 @@
     <form class="form-inline d-flex justify-content-center">
       <input class="form-control mb-3" name="county" placeholder="County">
       <input class="form-control mb-3 mx-1" name="donation"type="password" placeholder="Donation Amount">
-<div id="paypal-button"><button class="btn btn-primary mb-3">Donate Here</button></div>
+<div id="paypal-button"></div>
     </form>
     <small class="text-muted">
       By clicking "Get started" I agree to Nutrition.ly's
