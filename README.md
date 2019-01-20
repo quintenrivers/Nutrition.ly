@@ -1,6 +1,11 @@
 # Nutrition.ly
 Swamphacks 2019
 
+```bash
+export FLASK=Nutrition.ly
+run flask
+```
+
 + Low Income Low Access Tracts (Up to 10 Miles)
 + https://plot.ly/~quintenrivers/2/low-income-low-access-tracts-up-to-10-miles-by-county/
 
