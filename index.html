@@ -11,8 +11,8 @@
     <title>Nutrition.ly</title>
 
       <link href="http://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
-      <link href="assets/css/toolkit-minimal.css" rel="stylesheet">
-      <link href="assets/css/application-minimal.css" rel="stylesheet">
+      <link href="../assets/css/toolkit-minimal.css" rel="stylesheet">
+      <link href="../assets/css/application-minimal.css" rel="stylesheet">
 
     <style>
       /* note: this is a hack for ios iframe for bootstrap themes shopify page */
@@ -76,7 +76,7 @@
   <div class="container text-xs-center">
     <h1 class="block-title mb-0 text-uppercase app-myphone-brand">Nutrition.ly</h1>
     <p class="lead mb-5 pb-5">GIVING THE WORLD ONE LESS THING TO WORRY ABOUT</p>
-    <img src="assets/img/vegetables.png">
+    <img src="../assets/img/vegetables.png">
   </div>
 </div>
 
@@ -193,7 +193,7 @@
     </div>
   </div>
   <div class="text-right app-block-design-img">
-    <img src="assets/img/children.png" class="app-translate-50" data-transition="entrance">
+    <img src="../assets/img/children.png" class="app-translate-50" data-transition="entrance">
   </div>
 </div>
 
@@ -203,9 +203,9 @@
       Donate to fund a food bank in <strong>your</strong> local area today! 
     </p>
     <form class="form-inline d-flex justify-content-center">
-      <input class="form-control mb-3" placeholder="email address">
-      <input class="form-control mb-3 mx-1" type="password" placeholder="Create a Password">
-      <button class="btn btn-primary mb-3">Donate Here</button>
+      <input class="form-control mb-3" name="name" placeholder="County">
+      <input class="form-control mb-3 mx-1" name="donation"type="password" placeholder="Donation Amount">
+<div id="paypal-button"><button class="btn btn-primary mb-3">Donate Here</button></div>
     </form>
     <small class="text-muted">
       By clicking "Get started" I agree to Nutrition.ly's
@@ -251,6 +251,41 @@
     </div>
   </div>
 </div>
+
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+<script>
+    var CREATE_PAYMENT_URL  = 'http://127.0.0.1:5000/payment';
+    var EXECUTE_PAYMENT_URL = 'http://127.0.0.1:5000/execute';
+
+    paypal.Button.render({
+
+        env: 'sandbox', // Or 'sandbox'
+
+        commit: true, // Show a 'Pay Now' button
+
+        /*send request to CREATE_PAYMENT_URL; that route send requests using python sdk to make a payment*/
+        payment: function() {
+            return paypal.request.post(CREATE_PAYMENT_URL).then(function(data) {
+                return data.paymentID; //paymentID is passed to onAuthorize function
+            });
+        },
+        /*Sends requests to EXECUTE_PAYMENT_URL; route in flask app and pass the payerID and paymentID
+        */
+        onAuthorize: function(data) {
+            return paypal.request.post(EXECUTE_PAYMENT_URL, {
+                paymentID: data.paymentID, //who much to charge and who to charge
+                payerID:   data.payerID //payerID is who is paying
+            }).then(function(res) {
+
+                console.log(res.success)
+                // The payment is complete!
+                // You can now show a confirmation message to the customer
+            });
+        }
+
+    }, '#paypal-button');
+</script>
 
 <!--
     <script src="assets/js/jquery.min.js"></script>
