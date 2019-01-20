@@ -1,18 +1,38 @@
 import requests
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, pyrebase
 import paypalrestsdk
 
 app = Flask(__name__)
+
+config = {
+    "apiKey": "AIzaSyDxsShVirfF3ukNdFN4WDea1woOQ62un5I",
+    "authDomain": "nutritionly-9193c.firebaseapp.com",
+    "databaseURL": "https://nutritionly-9193c.firebaseio.com",
+    "projectId": "nutritionly-9193c",
+    "storageBucket": "nutritionly-9193c.appspot.com",
+    "messagingSenderId": "336866093958"
+}
 
 paypalrestsdk.configure({
   "mode": "sandbox", # sandbox or live
   "client_id": "AeoEfjH_9XiGmSQluXx34t6SMoOMXczIt9ZZIpLKaFeSAepMgynihbLNlgkIi8iGKHo3moMMM5BS-S4a",
   "client_secret": "EECiI5Aeeca3zaMiV1dUtTRPNl8YT1LZZBvDGVJa-mgoyuRxkST_riZhKX6XjQpL1a4_-g2-q26FnDmg" })
 
-@app.route('/')
+firebase = pyrebase.initialize_app(config)
+
+db = firebase.database()
+
+#Paypal page will not be home page
+@app.route('/',)
 def index():
+
+	county = request.form['name']
+		
+	donation = request.form['donation']
+
     return render_template('index.html')
 
+#creating payment, all info bout payment; before you know who is paying   
 @app.route('/payment', methods=['POST'])
 def payment():
 
@@ -26,13 +46,13 @@ def payment():
         "transactions": [{
             "item_list": {
                 "items": [{
-                    "name": "testitem",
+                    "name": county,
                     "sku": "12345",
-                    "price": "50.00",
+                    "price": donation,
                     "currency": "USD",
                     "quantity": 1}]},
             "amount": {
-                "total": "50.00",
+                "total": donation,
                 "currency": "USD"},
             "description": "This is the payment transaction description."}]})
 
@@ -40,7 +60,8 @@ def payment():
         print('Payment success!')
     else:
         print(payment.error)
-
+    
+    #returns payment ID
     return jsonify({'paymentID' : payment.id})
 
 @app.route('/execute', methods=['POST'])
@@ -52,11 +73,51 @@ def execute():
     if payment.execute({'payer_id' : request.form['payerID']}):
         print('Execute success!')
         success = True
+        db.child('Florida').update({county:donation})
     else:
         print(payment.error)
 
     return jsonify({'success' : success})
-"""
+
+
+
+
+
+"""Firebase
+ config = {
+    apiKey: "AIzaSyDxsShVirfF3ukNdFN4WDea1woOQ62un5I",
+    authDomain: "nutritionly-9193c.firebaseapp.com",
+    databaseURL: "https://nutritionly-9193c.firebaseio.com",
+    projectId: "nutritionly-9193c",
+    storageBucket: "nutritionly-9193c.appspot.com",
+    messagingSenderId: "336866093958"
+  }
+
+firebase = pyrebase.initialize_app(config)
+
+auth = firebase.auth()
+
+@app.route('/', methods=['GET', 'POST'])
+
+def basic():
+	unsuccessful = 'Please check your credentials'
+	successful = 'Login successful'
+	if request.method == 'POST':
+		email = request.form['name']
+		password = request.form['pass']
+		try:
+			auth.sign_in_with_email_and_password(email, password)
+			return render_template('new.html', s=successful)
+		except:
+			return render_template('new.html', us=unsuccessful)
+
+	return render_template('new.html')
+
+if __name__ == "__main__":
+	app.run(debug=True)
+
+
+
 @app.route('/tuna')
 def tuna():
 	return '<h2>Tuna is good</h2>'
@@ -96,7 +157,4 @@ def index(user=None)
 	return render_template("user.html", user=user)
 """
 
-
-if __name__ == "__main__":
-	app.run(debug=True)
 
