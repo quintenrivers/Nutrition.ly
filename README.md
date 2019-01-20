@@ -1,6 +1,7 @@
 # Nutrition.ly
 Swamphacks 2019
 
+### SETUP
 ```bash
 export FLASK=Nutrition.ly
 run flask
