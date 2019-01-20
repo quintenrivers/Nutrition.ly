@@ -26,7 +26,7 @@ db = firebase.database()
 @app.route('/',)
 def index():
 
-	county = request.form['name']
+	county = request.form['county']
 		
 	donation = request.form['donation']
 
@@ -47,7 +47,7 @@ def payment():
             "item_list": {
                 "items": [{
                     "name": county,
-                    "sku": "12345",
+                    "sku": "12345", #change if possible
                     "price": donation,
                     "currency": "USD",
                     "quantity": 1}]},
