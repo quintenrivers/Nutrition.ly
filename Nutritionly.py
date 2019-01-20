@@ -1,6 +1,7 @@
 import requests
-from flask import Flask, request, render_template, jsonify, pyrebase
+from flask import Flask, request, render_template, jsonify 
 import paypalrestsdk
+import pyrebase
 
 app = Flask(__name__)
 
@@ -19,18 +20,26 @@ paypalrestsdk.configure({
   "client_secret": "EECiI5Aeeca3zaMiV1dUtTRPNl8YT1LZZBvDGVJa-mgoyuRxkST_riZhKX6XjQpL1a4_-g2-q26FnDmg" })
 
 firebase = pyrebase.initialize_app(config)
-
+county = None
+donation = 1
 db = firebase.database()
 
 #Paypal page will not be home page
-@app.route('/',)
+@app.route('/')
 def index():
+	if request.method == 'POST':
+		county = request.form['county']	
+		donation = request.form['donation']
+	return render_template('index.html')
 
-	county = request.form['county']
-		
-	donation = request.form['donation']
-
-    return render_template('index.html')
+#test
+"""
+@app.route('/test')
+def test():
+	print('Ok')
+	return render_template('index.html')
+"""
+	
 
 #creating payment, all info bout payment; before you know who is paying   
 @app.route('/payment', methods=['POST'])
@@ -78,6 +87,10 @@ def execute():
         print(payment.error)
 
     return jsonify({'success' : success})
+
+
+if __name__ == "__main__":
+	app.run(debug=True)
 
 
 
