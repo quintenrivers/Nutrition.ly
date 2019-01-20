@@ -1,0 +1,25 @@
+
+.header {
+  padding: 6px;
+  text-align: left;
+  background: #1aa3ff;
+  color: white;
+  width: 100%;
+  font-size: 16px;
+  text-shadow: 1px 1px #000000;
+  margin-bottom:  50px;
+}
+.county
+{
+    
+    margin-left: 350px;
+ 
+}
+.graph
+{
+  margin-left: 300px;
+}
+.county3
+{
+  margin-left: 500px;
+}
