@@ -14,7 +14,11 @@ run flask
 
 ### What is a Food Drought?
 
-Food drought is a phrase used to describe an area that has low access to fresh food from groceries. Unfortunately, this often another inconvenience that afflicts those that are in poverty. Nutrient.ly aims to make those families' lives easier by allowing individuals to donate money to open and maintain food banks in the counties of their choice. 
+Food drought is a phrase used to describe an area that has low access to fresh food from groceries. Unfortunately, this often another inconvenience that afflicts those that are in poverty. Nutrient.ly aims to make those families' lives easier by lending a hand along with our users.
+
+### Nutrition.ly's Solution
+
+By taking in million's of datapoints and condensing them down into an easily digestible format, we at Nutrition.ly want to be able to give users the ability to see the prevelance of this epidemic. After seeing this, users can donate money to a county of their choice in order to open and maintain a food bank. In exchange, users can receive rewards every milestone of donations they make.
 
 ### PLOTS
 Low Income Low Access Tracts (Up to 10 Miles) Plot
