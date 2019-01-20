@@ -9,10 +9,20 @@
   County:<br>
     <select name="counties">
         <option value="Alachua">Alachua</option>
+        <option value="Bay">Bay</option>
+        <option value="Brevard">Brevard</option>
         <option value="Broward">Broward</option>
+        <option value="Duval">Duval</option>
+        <option value="Hillsborough">Hillsborough</option>
+        <option value="Lee">Lee</option>
         <option value="Leon">Leon</option>
         <option value="Miami-Dade">Miami-Dade</option>
+        <option value="Orange">Orange</option>
         <option value="Palm Beach">Palm Beach</option>
+        <option value="Pasco">Pasco</option>
+        <option value="Pinellas">Pinellas</option>
+        <option value="Sarasota">Sarasota</option>
+        <option value="Volusia">Volusia</option>
     </select>
     <br><br>
   Amount:<br>
